@@ -11,19 +11,32 @@ export const AllNotice = () => {
   // Amplify
   const [notices, setNotices] = useState([]);
 
-  useEffect(() => {
-    fetchNotices();
-  }, []);
+  // useEffect(() => {
+  //   fetchNotices();
+  // }, []);
 
-  async function fetchNotices() {
+  async function getNotices() {
     try {
-      const noticeData = await API.graphql(graphqlOperation(listNotices));
+      const noticeData = await API.graphql({
+        query: listNotices
+      })
       const notices = noticeData.data.listNotices.items;
       setNotices(notices);
+      console.log('notices: ', notices);
     } catch (err) {
-      console.log("error fetching notices");
+      console.log("error fetching data", err);
     }
   }
+
+  // async function fetchNotices() {
+  //   try {
+  //     const noticeData = await API.graphql(graphqlOperation(listNotices));
+  //     const notices = noticeData.data.listNotices.items;
+  //     setNotices(notices);
+  //   } catch (err) {
+  //     console.log("error fetching notices");
+  //   }
+  // }
 
   const navigate = useNavigate();
 

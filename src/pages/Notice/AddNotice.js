@@ -16,6 +16,8 @@ Amplify.configure(awsExports);
 const initialState = { title: "", content: "" };
 
 export const AddNotice = () => {
+  const navigate = useNavigate();
+
   // Amplify
   const [formStates, setFormStates] = useState(initialState);
   const [notices, setNotices] = useState([]);
@@ -24,19 +26,42 @@ export const AddNotice = () => {
     setFormStates({ ...formStates, [key]: value });
   }
 
-  async function addNotice() {
+  async function submitNewNotice() {
     try {
-      if (!formStates.title || !formStates.content) return;
-      const notice = { ...formStates };
-      setNotices([...notices, notice]);
-      setFormStates(initialState);
-      await API.graphql(graphqlOperation(createNotice, { input: notice }));
+      // if (!formStates.title || !formStates.content) return;
+      // const notice = { ...formStates };
+      // setNotices([...notices, notice]);
+      // setFormStates(initialState);
+      await API.graphql({
+        query: createNotice,
+        variables: {
+          input: {
+            title: formStates.title,
+            content: formStates.content
+          }
+        }
+      })
+      console.log('New notice created!');
+      // console.log('New notice created!', initialState );
+      navigate("/");
     } catch (err) {
-      console.log("error creating notice:", err);
+      console.log("error adding data", err);
     }
   }
 
-  // const navigate = useNavigate();
+  // async function addNotice() {
+  //   try {
+  // if (!formStates.title || !formStates.content) return;
+  // const notice = { ...formStates };
+  // setNotices([...notices, notice]);
+  // setFormStates(initialState);
+  //     await API.graphql(graphqlOperation(createNotice, { input: notice }));
+  //   } catch (err) {
+  //     console.log("error creating notice:", err);
+  //   }
+  // }
+
+
 
   // Validation
   const schema = yup.object().shape({
@@ -81,8 +106,7 @@ export const AddNotice = () => {
                   className={
                     errors.title ? "form-control is-invalid" : "form-control"
                   }
-                  onChange={(event) => setInput("title", event.target.value)}
-                  // value={formStates.title}
+                  onChange={e => setInput("title", e.target.value)}
                   id="floatingInput"
                   placeholder="Title"
                   {...register("title")}
@@ -99,8 +123,7 @@ export const AddNotice = () => {
                   className={
                     errors.content ? "form-control is-invalid" : "form-control"
                   }
-                  onChange={(event) => setInput("content", event.target.value)}
-                  // value={formStates.content}
+                  onChange={e => setInput("content", e.target.value)}
                   placeholder="Content"
                   id="floatingTextarea"
                   style={{ height: "200px" }}
