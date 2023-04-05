@@ -134,8 +134,9 @@ export const AddNotice = () => {
                   {errors.content?.message?.toString()}
                 </div>
               </div>
-
+{/* https://stackblitz.com/edit/react-hook-form-7-date-validation-example?file=App.jsx */}
               {/* Date */}
+              {/* Method 1 */}
               {/* <div className="row">
                 <div className="col-md-6">
                   <div className="mb-3">
@@ -168,6 +169,24 @@ export const AddNotice = () => {
                   </div>
                 </div>
               </div> */}
+              {/* Method 2 */}
+              {/* Start Date */}
+              <div className="form-floating mb-3">
+                <input
+                  type="date"
+                  className={
+                    errors.title ? "form-control is-invalid" : "form-control"
+                  }
+                  onChange={e => setInput("title", e.target.value)}
+                  id="floatingInput"
+                  placeholder="Title"
+                  {...register("title")}
+                />
+                <label htmlFor="floatingInput">Title</label>
+                <div className="text-start text-danger fw-semibold invalid-feedback">
+                  {errors.title?.message?.toString()}
+                </div>
+              </div>
 
               {/* Upload */}
               {/* <div>
